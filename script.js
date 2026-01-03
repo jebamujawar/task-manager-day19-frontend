@@ -4,8 +4,9 @@ const API = "https://task-manager-day19-backend-1.onrender.com/tasks";
 // Load tasks
 async function loadTasks() {
     try {
-        const res = await axios.get(API);
-        const tasks = res.data;
+        const res = await fetch(API);
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const tasks = await res.json();
 
         const list = document.getElementById("taskList");
         list.innerHTML = "";
@@ -42,7 +43,13 @@ async function addTask() {
     }
 
     try {
-        await axios.post(API, { title: input.value });
+        const res = await fetch(API, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: input.value })
+        });
+
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         input.value = "";
         loadTasks();
     } catch (error) {
@@ -54,7 +61,13 @@ async function addTask() {
 // Toggle complete
 async function toggleTask(id, completed) {
     try {
-        await axios.put(`${API}/${id}`, { completed });
+        const res = await fetch(`${API}/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ completed })
+        });
+
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         loadTasks();
     } catch (error) {
         console.error("Error updating task:", error);
@@ -65,7 +78,8 @@ async function toggleTask(id, completed) {
 // Delete task
 async function deleteTask(id) {
     try {
-        await axios.delete(`${API}/${id}`);
+        const res = await fetch(`${API}/${id}`, { method: "DELETE" });
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         loadTasks();
     } catch (error) {
         console.error("Error deleting task:", error);
