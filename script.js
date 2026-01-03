@@ -1,5 +1,5 @@
-//Make sure to include /tasks at the end
-const API = "https://task-manager-day19-backend-1.onrender.com";
+// Correct API URL with /tasks at the end
+const API = "https://task-manager-day19-backend-1.onrender.com/tasks";
 
 // Load tasks
 async function loadTasks() {
@@ -47,6 +47,7 @@ async function addTask() {
         loadTasks();
     } catch (error) {
         console.error("Error adding task:", error);
+        alert("Failed to add task. Check backend.");
     }
 }
 
@@ -57,6 +58,7 @@ async function toggleTask(id, completed) {
         loadTasks();
     } catch (error) {
         console.error("Error updating task:", error);
+        alert("Failed to update task. Check backend.");
     }
 }
 
